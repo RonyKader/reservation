@@ -59,15 +59,16 @@ class CompanyActivityController extends Controller
         $this->authorize('update', $company);
         $guides = $company->users()->where('role_id', Role::GUIDE->value)
             ->where('company_id', $company->id)
-            ->pluck('id','name');
-        return view('companies.activities.edit', compact('company', 'activity', 'guides'));
+            ->pluck('name','id');
+
+        return view('companies.activities.edit', compact( 'guides', 'activity', 'company'));
 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateActivityRequest $request, Activity $activity, Company $company): RedirectResponse
+    public function update(UpdateActivityRequest $request, Company $company, Activity $activity)
     {
         $this->authorize('update', $company);
         if ($request->hasFile('image')) {
